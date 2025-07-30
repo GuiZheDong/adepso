@@ -2,21 +2,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-# =====================================
-#  1️⃣ 四人博弈的 fitness 和 constraints
-# =====================================
+
 def fitness(x):
-    # 12个lambda变量
+
     lam = x[:12]
     lam12, lam21, lam13, lam31, lam14, lam41, lam23, lam32, lam24, lam42, lam34, lam43 = lam
 
-    # 四个玩家的混合策略，每人3个策略概率
+
     x1_1, x2_1, x3_1 = x[12:15]
     x1_2, x2_2, x3_2 = x[15:18]
     x1_3, x2_3, x3_3 = x[18:21]
     x1_4, x2_4, x3_4 = x[21:24]
 
-    # 四个玩家间的收益矩阵（示例，3x3）
+
     A = np.array([[-3, 0, 1],
                   [-4, -2, 0],
                   [ 1, -1, -3]])
@@ -30,7 +28,7 @@ def fitness(x):
                   [-1, 1, -1],
                   [0, -1, 1]])
 
-    # 计算各玩家间的收益项（示例对应 λ 和矩阵）
+
     f1 = lam12 + x1_1 * (A[0] @ [x1_2, x2_2, x3_2])
     f2 = lam21 + x2_1 * (A[1] @ [x1_2, x2_2, x3_2])
     f3 = lam13 + x1_1 * (B[0] @ [x1_3, x2_3, x3_3])
@@ -61,9 +59,6 @@ def constraints(x):
     return 1000*(c1+c2+c3+c4)
 
 
-# =====================================
-#  2️⃣ ADEPSO 类
-# =====================================
 class ADEPSO:
     def __init__(self, fitness, constraints, lower, upper, pop_size, dim, epochs, P):
         self.fitness = fitness
@@ -164,9 +159,7 @@ class ADEPSO:
         return self.best, best_hist
 
 
-# =====================================
-#  3️⃣ LRA-CMA-ES 原始实现 (精简封装)
-# =====================================
+
 class Solution:
     def __init__(self, dim):
         self.f = float("nan")
@@ -212,9 +205,7 @@ def run_LRACMAES(obj_func, dim, mean, sigma, seed=1, max_evals=100000):
     return sols[0].x.flatten(), best_hist
 
 
-# =====================================
-#  4️⃣ 主函数：四人博弈对比
-# =====================================
+
 if __name__ == "__main__":
     dim = 24
     lower = np.zeros(dim)
