@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import enum, math
 
-# =====================================
-#  1️⃣ 三人博弈的 fitness 和 constraints
-# =====================================
+
 def fitness(x):
     lam12, lam21, lam13, lam31, lam23, lam32 = x[:6]
     x1_1, x2_1, x3_1 = x[6:9]
@@ -42,9 +40,7 @@ def constraints(x):
     return 1000*(c1+c2+c3)
 
 
-# =====================================
-#  2️⃣ ADEPSO 类 (你的完整代码)
-# =====================================
+
 class ADEPSO:
     def __init__(self, fitness, constraints, lower, upper, pop_size, dim, epochs, P):
         self.fitness = fitness
@@ -143,9 +139,7 @@ class ADEPSO:
         return self.best, best_hist
 
 
-# =====================================
-#  3️⃣ LRA-CMA-ES 原始实现 (精简封装)
-# =====================================
+
 class Solution:
     def __init__(self, dim):
         self.f = float("nan")
@@ -191,9 +185,6 @@ def run_LRACMAES(obj_func, dim, mean, sigma, seed=1, max_evals=100000):
     return sols[0].x.flatten(), best_hist
 
 
-# =====================================
-#  4️⃣ 主函数：三人博弈对比
-# =====================================
 if __name__ == "__main__":
     dim = 15
     lower = np.zeros(dim)
