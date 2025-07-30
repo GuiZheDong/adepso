@@ -2,18 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-# =====================================
-#  1️⃣ 八人博弈的 fitness 和 constraints
-# =====================================
+
 
 def fitness(x):
-    # 前56维为 lambda_ij，其中 i != j，i,j=1..8
-    lam = x[:56]  # λ变量
+    lam = x[:56] 
 
-    # 8个玩家，每人3个策略概率
+
     strategies = [x[56+i*3:56+(i+1)*3] for i in range(8)]
 
-    # 统一3x3收益矩阵示例（你可替换为自己的矩阵）
     M = np.array([
         [-3, 0, 1],
         [-4, -2, 0],
@@ -23,26 +19,24 @@ def fitness(x):
     total = 0.0
     idx = 0  # λ索引
 
-    # 计算所有玩家对其他玩家的交互贡献
+
     for i in range(8):
         for j in range(8):
             if i != j:
                 # lam_ij
                 lam_ij = lam[idx]
                 idx += 1
-                # 玩家i的策略向量
                 s_i = strategies[i]
-                # 玩家j的策略向量
+
                 s_j = strategies[j]
-                # 计算收益项: lam_ij + 玩家i策略 @ M @ 玩家j策略
-                # 因为M是3x3，s_i和s_j是长度3的概率向量
+
                 val = lam_ij + s_i @ M @ s_j
                 total += abs(val)
 
     return total
 
 def constraints(x):
-    # 策略部分共24维，每3维对应一名玩家的策略概率，和应为1
+
     constr = 0.0
     for i in range(8):
         s = x[56+i*3:56+(i+1)*3]
@@ -50,9 +44,6 @@ def constraints(x):
     return 1000 * constr
 
 
-# =====================================
-#  2️⃣ ADEPSO 类
-# =====================================
 class ADEPSO:
     def __init__(self, fitness, constraints, lower, upper, pop_size, dim, epochs, P):
         self.fitness = fitness
@@ -153,9 +144,6 @@ class ADEPSO:
         return self.best, best_hist
 
 
-# =====================================
-#  3️⃣ LRA-CMA-ES 原始实现 (精简封装)
-# =====================================
 class Solution:
     def __init__(self, dim):
         self.f = float("nan")
@@ -201,11 +189,9 @@ def run_LRACMAES(obj_func, dim, mean, sigma, seed=1, max_evals=100000):
     return sols[0].x.flatten(), best_hist
 
 
-# =====================================
-#  4️⃣ 主函数：八人博弈对比
-# =====================================
+
 if __name__ == "__main__":
-    dim = 80  # 56 lambda + 24 策略变量
+    dim = 80  # 56 lambda + 24 
     lower = np.zeros(dim)
     upper = np.ones(dim)
 
